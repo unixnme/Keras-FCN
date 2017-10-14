@@ -181,7 +181,7 @@ if __name__ == '__main__':
     else:
         weight_decay = 1e-4
     target_size = (320, 320)
-    dataset = 'VOC2012_BERKELEY'
+    dataset = 'VOC2012'
     if dataset == 'VOC2012_BERKELEY':
         # pascal voc + berkeley semantic contours annotations
         train_file_path = os.path.expanduser('~/.keras/datasets/VOC2012/combined_imageset_train.txt') #Data/VOClarge/VOC2012/ImageSets/Segmentation
@@ -215,6 +215,15 @@ if __name__ == '__main__':
         loss_shape = None
         ignore_label = 255
         label_cval = 255
+    if dataset == 'VOC2012':
+        train_file_path = os.path.expanduser('~/.keras/datasets/VOC2012/VOCdevkit/VOC2012/ImageSets/Segmentation/train.txt') 
+        val_file_path   = os.path.expanduser('~/.keras/datasets/VOC2012/VOCdevkit/VOC2012/ImageSets/Segmentation/val.txt')
+        data_dir        = os.path.expanduser('~/.keras/datasets/VOC2012/VOCdevkit/VOC2012/JPEGImages')
+        label_dir       = os.path.expanduser('~/.keras/datasets/VOC2012/VOCdevkit/VOC2012/SegmentationClass')
+        data_suffix='.jpg'
+        label_suffix='.png'
+        classes = 21
+
 
     # Class weight is not yet supported for 3+ dimensional targets
     # class_weight = {i: 1 for i in range(classes)}
