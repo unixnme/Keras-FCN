@@ -100,18 +100,17 @@ def train(batch_size, epochs, lr_base, lr_power, weight_decay, classes,
     # #vis_util.plot(model, to_file=img_path, show_shapes=True)
     model.summary()
 
-    # lr_reducer      = ReduceLROnPlateau(monitor=softmax_sparse_crossentropy_ignoring_last_label, factor=np.sqrt(0.1),
-    #                                     cooldown=0, patience=15, min_lr=0.5e-6)
-    # early_stopper   = EarlyStopping(monitor=sparse_accuracy_ignoring_last_label, min_delta=0.0001, patience=70)
-    # callbacks = [early_stopper, lr_reducer]
-    callbacks = [scheduler]
+    lr_reducer      = ReduceLROnPlateau(factor=0.5,
+                                        cooldown=0, patience=15, min_lr=0.5e-6, verbose=1)
+    early_stopper   = EarlyStopping(min_delta=1e-5, patience=30, verbose=1)
+    callbacks = [early_stopper, lr_reducer]
 
     # ####################### tfboard ###########################
     #if K.backend() == 'tensorflow':
     #    tensorboard = TensorBoard(log_dir=os.path.join(save_path, 'logs'), histogram_freq=10, write_graph=True)
     #    callbacks.append(tensorboard)
     # ################### checkpoint saver#######################
-    checkpoint = ModelCheckpoint(filepath=os.path.join(save_path, 'checkpoint_weights.hdf5'), save_weights_only=False, verbose=1, save_best_only=True)#.{epoch:d}
+    checkpoint = ModelCheckpoint(filepath=os.path.join(save_path, 'checkpoint_weights_plateau.hdf5'), save_weights_only=False, verbose=1, save_best_only=True)#.{epoch:d}
     callbacks.append(checkpoint)
     # set data generator and train
     train_datagen = SegDataGenerator(zoom_range=[0.5, 2.0],
