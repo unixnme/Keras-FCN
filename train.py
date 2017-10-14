@@ -107,11 +107,11 @@ def train(batch_size, epochs, lr_base, lr_power, weight_decay, classes,
     callbacks = [scheduler]
 
     # ####################### tfboard ###########################
-    if K.backend() == 'tensorflow':
-        tensorboard = TensorBoard(log_dir=os.path.join(save_path, 'logs'), histogram_freq=10, write_graph=True)
-        callbacks.append(tensorboard)
+    #if K.backend() == 'tensorflow':
+    #    tensorboard = TensorBoard(log_dir=os.path.join(save_path, 'logs'), histogram_freq=10, write_graph=True)
+    #    callbacks.append(tensorboard)
     # ################### checkpoint saver#######################
-    checkpoint = ModelCheckpoint(filepath=os.path.join(save_path, 'checkpoint_weights.hdf5'), save_weights_only=True)#.{epoch:d}
+    checkpoint = ModelCheckpoint(filepath=os.path.join(save_path, 'checkpoint_weights.hdf5'), save_weights_only=False, verbose=1, save_best_only=True)#.{epoch:d}
     callbacks.append(checkpoint)
     # set data generator and train
     train_datagen = SegDataGenerator(zoom_range=[0.5, 2.0],
@@ -136,6 +136,7 @@ def train(batch_size, epochs, lr_base, lr_power, weight_decay, classes,
     # from Keras documentation: Total number of steps (batches of samples) to yield from generator before declaring one epoch finished
     # and starting the next epoch. It should typically be equal to the number of unique samples of your dataset divided by the batch size.
     steps_per_epoch = int(np.ceil(get_file_len(train_file_path) / float(batch_size)))
+    validation_steps = int(np.ceil(get_file_len(val_file_path) / float(batch_size)))
 
     history = model.fit_generator(
         generator=train_datagen.flow_from_directory(
@@ -153,13 +154,13 @@ def train(batch_size, epochs, lr_base, lr_power, weight_decay, classes,
         epochs=epochs,
         callbacks=callbacks,
         workers=4,
-        # validation_data=val_datagen.flow_from_directory(
-        #     file_path=val_file_path, data_dir=data_dir, data_suffix='.jpg',
-        #     label_dir=label_dir, label_suffix='.png',classes=classes,
-        #     target_size=target_size, color_mode='rgb',
-        #     batch_size=batch_size, shuffle=False
-        # ),
-        # nb_val_samples = 64
+        validation_data=val_datagen.flow_from_directory(
+            file_path=val_file_path, data_dir=data_dir, data_suffix='.jpg',
+            label_dir=label_dir, label_suffix='.png',classes=classes,
+            target_size=target_size, color_mode='rgb',
+            batch_size=batch_size, shuffle=False
+        ),
+        validation_steps=validation_steps,
         class_weight=class_weight
        )
 
