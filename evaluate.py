@@ -85,7 +85,7 @@ if __name__ == '__main__':
     image_size = (512, 512)
     nb_classes = 21
     batch_size = 1
-    dataset = 'VOC2012_BERKELEY'
+    dataset = 'VOC2012'
     if dataset == 'VOC2012_BERKELEY':
         # pascal voc + berkeley semantic contours annotations
         train_file_path = os.path.expanduser('~/.keras/datasets/VOC2012/combined_imageset_train.txt') #Data/VOClarge/VOC2012/ImageSets/Segmentation
@@ -94,6 +94,7 @@ if __name__ == '__main__':
         data_dir        = os.path.expanduser('~/.keras/datasets/VOC2012/VOCdevkit/VOC2012/JPEGImages')
         label_dir       = os.path.expanduser('~/.keras/datasets/VOC2012/combined_annotations')
         label_suffix = '.png'
+        data_suffix = '.jpg'
     if dataset == 'COCO':
         train_file_path = os.path.expanduser('~/.keras/datasets/VOC2012/VOCdevkit/VOC2012/ImageSets/Segmentation/train.txt') #Data/VOClarge/VOC2012/ImageSets/Segmentation
         # train_file_path = os.path.expanduser('~/.keras/datasets/oneimage/train.txt') #Data/VOClarge/VOC2012/ImageSets/Segmentation
@@ -101,5 +102,14 @@ if __name__ == '__main__':
         data_dir        = os.path.expanduser('~/.keras/datasets/VOC2012/VOCdevkit/VOC2012/JPEGImages')
         label_dir       = os.path.expanduser('~/.keras/datasets/VOC2012/VOCdevkit/VOC2012/SegmentationClass')
         label_suffix = '.npy'
+    if dataset == 'VOC2012':
+        train_file_path = os.path.expanduser('~/.keras/datasets/VOC2012/VOCdevkit/VOC2012/ImageSets/Segmentation/train.txt') 
+        val_file_path   = os.path.expanduser('~/.keras/datasets/VOC2012/VOCdevkit/VOC2012/ImageSets/Segmentation/val.txt')
+        data_dir        = os.path.expanduser('~/.keras/datasets/VOC2012/VOCdevkit/VOC2012/JPEGImages')
+        label_dir       = os.path.expanduser('~/.keras/datasets/VOC2012/VOCdevkit/VOC2012/SegmentationClass')
+        data_suffix='.jpg'
+        label_suffix='.png'
+        classes = 21
+
     evaluate(model_name, weight_file, image_size, nb_classes, batch_size, val_file_path, data_dir, label_dir,
              label_suffix=label_suffix, data_suffix=data_suffix)
