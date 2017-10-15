@@ -80,7 +80,7 @@ if __name__ == '__main__':
     # model_name = 'Atrous_DenseNet'
     model_name = 'AtrousFCN_Resnet50_16s'
     # model_name = 'DenseNet_FCN'
-    weight_file = 'checkpoint_weights.hdf5'
+    weight_file = 'checkpoint_weights_plateau.hdf5'
     # weight_file = 'model.hdf5'
     image_size = (512, 512)
     nb_classes = 21
@@ -94,6 +94,7 @@ if __name__ == '__main__':
         data_dir        = os.path.expanduser('~/.keras/datasets/VOC2012/VOCdevkit/VOC2012/JPEGImages')
         label_dir       = os.path.expanduser('~/.keras/datasets/VOC2012/combined_annotations')
         label_suffix = '.png'
+        data_suffix = '.jpg'
     if dataset == 'COCO':
         train_file_path = os.path.expanduser('~/.keras/datasets/VOC2012/VOCdevkit/VOC2012/ImageSets/Segmentation/train.txt') #Data/VOClarge/VOC2012/ImageSets/Segmentation
         # train_file_path = os.path.expanduser('~/.keras/datasets/oneimage/train.txt') #Data/VOClarge/VOC2012/ImageSets/Segmentation
