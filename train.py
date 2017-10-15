@@ -82,8 +82,8 @@ def train(batch_size, epochs, lr_base, lr_power, weight_decay, classes,
                                   classes=classes)
 
     # ###################### optimizer ########################
-    optimizer = SGD(lr=lr_base, momentum=0.9)
-    # optimizer = Nadam(lr=lr_base, beta_1 = 0.825, beta_2 = 0.99685)
+    #optimizer = SGD(lr=lr_base, momentum=0.9)
+    optimizer = Nadam(lr=lr_base)
 
     model.compile(loss=loss_fn,
                   optimizer=optimizer,
@@ -110,7 +110,7 @@ def train(batch_size, epochs, lr_base, lr_power, weight_decay, classes,
     #    tensorboard = TensorBoard(log_dir=os.path.join(save_path, 'logs'), histogram_freq=10, write_graph=True)
     #    callbacks.append(tensorboard)
     # ################### checkpoint saver#######################
-    checkpoint = ModelCheckpoint(filepath=os.path.join(save_path, 'checkpoint_weights_plateau.hdf5'), save_weights_only=False, verbose=1, save_best_only=True)#.{epoch:d}
+    checkpoint = ModelCheckpoint(filepath=os.path.join(save_path, 'checkpoint_weights_plateau_Nadam.hdf5'), save_weights_only=False, verbose=1, save_best_only=True)#.{epoch:d}
     callbacks.append(checkpoint)
     # set data generator and train
     train_datagen = SegDataGenerator(zoom_range=[0.5, 2.0],
@@ -172,7 +172,7 @@ if __name__ == '__main__':
     batch_size = 16
     batchnorm_momentum = 0.95
     epochs = 250
-    lr_base = 0.01 * (float(batch_size) / 16)
+    lr_base = 0.001 * (float(batch_size) / 16)
     lr_power = 0.9
     resume_training = False
     if model_name is 'AtrousFCN_Resnet50_16s':
