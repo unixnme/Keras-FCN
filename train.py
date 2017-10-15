@@ -10,6 +10,8 @@ from keras.objectives import *
 from keras.metrics import binary_accuracy
 from keras.models import load_model
 import keras.backend as K
+from keras.regularizers import l2
+from low_res import create_model, leaky, elu
 #import keras.utils.visualize_util as vis_util
 
 from models import *
@@ -75,15 +77,17 @@ def train(batch_size, epochs, lr_base, lr_power, weight_decay, classes,
 
     # ###################### make model ########################
     checkpoint_path = os.path.join(save_path, 'checkpoint_weights.hdf5')
-
+    '''
     model = globals()[model_name](weight_decay=weight_decay,
                                   input_shape=input_shape,
                                   batch_momentum=batchnorm_momentum,
                                   classes=classes)
+    '''
+    model = create_model(shape=input_shape, initializer='he_normal', BN=True, activation=elu, filter=4, num_blocks=5, num_classes=21, regularizer=l2(1e-5))
 
     # ###################### optimizer ########################
-    optimizer = SGD(lr=lr_base, momentum=0.9)
-    # optimizer = Nadam(lr=lr_base, beta_1 = 0.825, beta_2 = 0.99685)
+    #optimizer = SGD(lr=1e-2, momentum=0.9, nesterov=True)
+    optimizer = Nadam(lr=lr_base)
 
     model.compile(loss=loss_fn,
                   optimizer=optimizer,
@@ -170,10 +174,10 @@ if __name__ == '__main__':
     model_name = 'AtrousFCN_Resnet50_16s'
     #model_name = 'Atrous_DenseNet'
     #model_name = 'DenseNet_FCN'
-    batch_size = 16
+    batch_size = 12
     batchnorm_momentum = 0.95
     epochs = 250
-    lr_base = 0.01 * (float(batch_size) / 16)
+    lr_base = 2e-3
     lr_power = 0.9
     resume_training = False
     if model_name is 'AtrousFCN_Resnet50_16s':

@@ -80,7 +80,7 @@ if __name__ == '__main__':
     # model_name = 'Atrous_DenseNet'
     model_name = 'AtrousFCN_Resnet50_16s'
     # model_name = 'DenseNet_FCN'
-    weight_file = 'checkpoint_weights.hdf5'
+    weight_file = 'checkpoint_weights_plateau.hdf5'
     # weight_file = 'model.hdf5'
     image_size = (512, 512)
     nb_classes = 21
